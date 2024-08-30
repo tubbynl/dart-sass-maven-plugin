@@ -146,7 +146,7 @@ public abstract class AbstractSassCommand implements SassCommand {
 
             int exitCode = process.waitFor();
             if (exitCode != 0) {
-                String errors = IOUtils.readLines(process.getErrorStream(), Charset.defaultCharset())
+                String errors = IOUtils.readLines(process.getInputStream(), Charset.defaultCharset())
                         .stream().collect(Collectors.joining("\n"));
                 throw new SassCommandException(
                         "Process [" + processBuilder.command() + "] exited with code " + exitCode + '\n'+errors);
