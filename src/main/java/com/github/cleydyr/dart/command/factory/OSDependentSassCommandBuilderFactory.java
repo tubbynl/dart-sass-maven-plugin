@@ -28,19 +28,20 @@ public class OSDependentSassCommandBuilderFactory implements SassCommandBuilderF
 
                 Path tmpDirPath = SystemUtils.getExecutableTempFolder(dartSassReleaseParameter);
                 if (!tmpDirPath.toFile().isDirectory()) {
-                    throw new SassCommandException(tmpDirPath+" is not a valid directory");
+                    throw new SassCommandException(tmpDirPath + " is not a valid directory");
                 }
 
                 Path sassExecutablePath = tmpDirPath.resolve(OSDetector.isWindows() ? "sass.bat" : "sass");
                 if (!sassExecutablePath.toFile().canExecute()) {
-                    throw new SassCommandException(sassExecutablePath+" is not executable");
+                    throw new SassCommandException(sassExecutablePath + " is not executable");
                 }
 
-                Path dartExecutablePath = tmpDirPath.resolve("src").resolve(OSDetector.isWindows() ? "dart.exe" : "dart");
+                Path dartExecutablePath =
+                        tmpDirPath.resolve("src").resolve(OSDetector.isWindows() ? "dart.exe" : "dart");
                 if (!dartExecutablePath.toFile().canExecute()) {
-                    throw new SassCommandException(dartExecutablePath+" is not executable");
+                    throw new SassCommandException(dartExecutablePath + " is not executable");
                 }
-
+                System.err.print(dartExecutablePath);
                 return new AbstractSassCommand() {
                     @Override
                     protected void setExecutable(List<String> commands) {

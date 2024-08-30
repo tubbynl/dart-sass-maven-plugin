@@ -6,7 +6,6 @@ import com.github.cleydyr.dart.command.enums.SourceMapURLs;
 import com.github.cleydyr.dart.command.enums.Style;
 import com.github.cleydyr.dart.command.exception.SassCommandException;
 import com.github.cleydyr.dart.command.parameter.ParameterPair;
-
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -127,9 +126,7 @@ public abstract class AbstractSassCommand implements SassCommand {
         setExecutable(commands);
         setOptions(commands);
         setArguments(commands);
-        return new ProcessBuilder(commands)
-                .inheritIO()
-                .redirectErrorStream(true);
+        return new ProcessBuilder(commands).inheritIO().redirectErrorStream(true);
     }
 
     @Override
