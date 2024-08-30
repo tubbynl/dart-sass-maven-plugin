@@ -22,23 +22,25 @@ public class OSDependentSassCommandBuilderFactory implements SassCommandBuilderF
             protected AbstractSassCommand getSassCommandInstance(DartSassReleaseParameter dartSassReleaseParameter)
                     throws SassCommandException {
                 String tmpDir = System.getProperty("java.io.tmpdir");
-
                 if (tmpDir == null) {
                     throw new SassCommandException("java.io.tmpdir variable must be set");
                 }
 
                 Path tmpDirPath = SystemUtils.getExecutableTempFolder(dartSassReleaseParameter);
-
                 if (!tmpDirPath.toFile().isDirectory()) {
                     throw new SassCommandException("java.io.tmpdir is not a valid directory");
                 }
 
                 String executableName = OSDetector.isWindows() ? "sass.bat" : "sass";
+                Path executablePath = tmpDirPath.resolve(executableName);
+                if (!executablePath.toFile().canExecute()) {
+                    throw new SassCommandException(executablePath+" is not executable");
+                }
 
                 return new AbstractSassCommand() {
                     @Override
                     protected void setExecutable(List<String> commands) {
-                        commands.add(tmpDirPath.resolve(executableName).toString());
+                        commands.add(executablePath.toString());
                     }
                 };
             }
