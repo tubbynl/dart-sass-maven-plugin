@@ -1,6 +1,6 @@
 .mvn-verify:
   image:
-    name: maven:3.9-eclipse-temurin-8-alpine
+    name: maven:3.9-eclipse-temurin-11-alpine
     pull_policy: if-not-present
   stage: build
   variables:
