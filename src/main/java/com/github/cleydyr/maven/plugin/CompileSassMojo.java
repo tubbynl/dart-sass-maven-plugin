@@ -312,7 +312,7 @@ public class CompileSassMojo extends AbstractMojo {
                 throw new MojoExecutionException("Error while obtaining file count: ", fileCounterException);
             }
         } catch (SassCommandException sassCommandException) {
-            throw new MojoExecutionException("Can't execute SASS command", sassCommandException);
+            throw new MojoExecutionException("Can't execute SassCommand "+sassCommand, sassCommandException);
         }
     }
 

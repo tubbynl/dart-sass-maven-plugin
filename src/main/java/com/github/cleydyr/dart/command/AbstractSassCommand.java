@@ -134,22 +134,18 @@ public abstract class AbstractSassCommand implements SassCommand {
         setOptions(commands);
 
         setArguments(commands);
-
+        System.err.println(commands);
         try {
-            ProcessBuilder processBuilder = new ProcessBuilder(commands).inheritIO();
-
-            processBuilder.redirectErrorStream(true);
-
-            processBuilder.inheritIO();
+            ProcessBuilder processBuilder = new ProcessBuilder(commands)
+                            .inheritIO()
+                            .redirectErrorStream(true);
 
             Process process = processBuilder.start();
 
             int exitCode = process.waitFor();
             if (exitCode != 0) {
-                String errors = IOUtils.readLines(process.getInputStream(), Charset.defaultCharset())
-                        .stream().collect(Collectors.joining("\n"));
                 throw new SassCommandException(
-                        "Process [" + processBuilder.command() + "] exited with code " + exitCode + '\n'+errors);
+                        "Process [" + processBuilder.command() + "] exited with code " + exitCode + '\n');
             }
         } catch (InterruptedException interruptedException) {
             throw new SassCommandException(interruptedException);
