@@ -135,8 +135,7 @@ public abstract class AbstractSassCommand implements SassCommand {
     @Override
     public void execute() throws SassCommandException {
         ProcessBuilder processBuilder = prepareProcessBuilder();
-        List<String> commands = new ArrayList<>();
-        System.err.println(processBuilder);
+        System.err.println(processBuilder.command());
         try {
             Process process = processBuilder.start();
             int exitCode = process.waitFor();
