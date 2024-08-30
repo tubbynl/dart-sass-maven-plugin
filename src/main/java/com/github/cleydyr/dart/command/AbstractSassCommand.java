@@ -6,15 +6,12 @@ import com.github.cleydyr.dart.command.enums.SourceMapURLs;
 import com.github.cleydyr.dart.command.enums.Style;
 import com.github.cleydyr.dart.command.exception.SassCommandException;
 import com.github.cleydyr.dart.command.parameter.ParameterPair;
-import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public abstract class AbstractSassCommand implements SassCommand {
     private List<Path> loadPaths;
@@ -125,23 +122,23 @@ public abstract class AbstractSassCommand implements SassCommand {
 
     private boolean pollEnabled;
 
+    protected ProcessBuilder prepareProcessBuilder() {
+        List<String> commands = new ArrayList<>();
+        setExecutable(commands);
+        setOptions(commands);
+        setArguments(commands);
+        return new ProcessBuilder(commands)
+                .inheritIO()
+                .redirectErrorStream(true);
+    }
+
     @Override
     public void execute() throws SassCommandException {
+        ProcessBuilder processBuilder = prepareProcessBuilder();
         List<String> commands = new ArrayList<>();
-
-        setExecutable(commands);
-
-        setOptions(commands);
-
-        setArguments(commands);
-        System.err.println(commands);
+        System.err.println(processBuilder);
         try {
-            ProcessBuilder processBuilder = new ProcessBuilder(commands)
-                            .inheritIO()
-                            .redirectErrorStream(true);
-
             Process process = processBuilder.start();
-
             int exitCode = process.waitFor();
             if (exitCode != 0) {
                 throw new SassCommandException(
