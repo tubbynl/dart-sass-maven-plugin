@@ -1,0 +1,32 @@
+.mvn-verify:
+  image:
+    name: maven:3.9-eclipse-temurin-8-alpine
+    pull_policy: if-not-present
+  stage: build
+  variables:
+    MAVEN_OPTS: "-Dmaven.repo.local=/cache/.m2/repository"
+    MAVEN_CLI_OPTS: "-s mvn-settings-ci.xml --batch-mode -T 1C"
+  before_script:
+    - "mvn $MAVEN_CLI_OPTS -v"
+  script:
+    - "mvn $MAVEN_CLI_OPTS verify"
+  artifacts:
+    expire_in: 4 hrs
+    paths:
+      - "**/target/*.jar"
+      - "**/pom.xml"
+    reports:
+      junit:
+        - "**/target/surefire-reports/*.xml"
+
+mvn:verify:
+  extends: .mvn-verify
+  except: [tags]
+
+mvn:release:
+  extends: .mvn-verify
+  only: [tags]
+  before_script:
+    - "mvn $MAVEN_CLI_OPTS versions:set -DprocessAllModules -DnewVersion=$CI_COMMIT_TAG"
+  after_script:
+    - "mvn $MAVEN_CLI_OPTS jar:jar deploy:deploy -DaltDeploymentRepository=gitlab-maven::https://gitlab.com/api/v4/projects/$CI_PROJECT_ID/packages/maven"
