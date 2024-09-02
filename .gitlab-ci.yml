@@ -1,0 +1,19 @@
+.mvn-verify:
+  image: maven:3.9-eclipse-temurin-11-alpine
+  stage: build
+  before_script:
+    - "mvn $MAVEN_CLI_OPTS -v"
+  script:
+    - "mvn $MAVEN_CLI_OPTS verify"
+  artifacts:
+    expire_in: 4 hrs
+    paths:
+      - "**/target/*.jar"
+      - "**/pom.xml"
+    reports:
+      junit:
+        - "**/target/surefire-reports/*.xml"
+
+mvn:verify:
+  extends: .mvn-verify
+  except: [tags]
