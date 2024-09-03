@@ -1,5 +1,5 @@
 mvn:test:
-  image: maven:3.9-eclipse-temurin-11
+  image: maven:3.9-eclipse-temurin-11-alpine
   stage: build
   before_script:
     - "mvn -v"
