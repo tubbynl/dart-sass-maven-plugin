@@ -12,5 +12,7 @@ jobs:
         with:
           java-version: '11'
           distribution: 'adopt'
+      - name: Copy musl test project
+        run: cp src/test/resources/musl/test-project/pom.xml src/test/resources/test-project/pom.xml
       - name: Build with Maven
         run: mvn --batch-mode --update-snapshots clean test spotless:check ossindex:audit
